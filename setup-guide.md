@@ -648,6 +648,15 @@ This endpoint is not reachable from the public internet. Once the
 Site-to-Site VPN is configured (see below), it will be reachable from the
 corporate network.
 
+You can use SSM port-forwarding to make this service available on your local machine:
+
+```
+aws ssm start-session \
+  --target "$BASTION_ID" \
+  --document-name AWS-StartPortForwardingSessionToRemoteHost \
+  --parameters '{"host":["<internal-nlb-hostname>"],"portNumber":["80"],"localPortNumber":["8080"]}'
+```
+
 ### Cleanup
 
 ```bash
