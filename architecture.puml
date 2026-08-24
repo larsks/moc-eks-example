@@ -1,0 +1,41 @@
+@startnwdiag
+network internet {
+  color = "red"
+  igw [description = "Internet\nGateway"]
+  api_server [description = "EKS API Server\n(AWS-managed)"]
+}
+
+network public-10.0.1.0 {
+  color = "green"
+  address = "10.0.1.0/24 (us-east-1a)"
+  igw
+  nat_gw [description = "NAT Gateway\n(Elastic IP)"]
+  public_alb [description = "Public ALB\n(Keycloak)"]
+}
+
+network public-10.0.2.0 {
+  color = "green"
+  address = "10.0.2.0/24 (us-east-1b)"
+  igw
+  public_alb
+}
+
+network private-10.0.10.0 {
+  color = "blue"
+  address = "10.0.10.0/24 (us-east-1a)"
+  nat_gw
+  api_server
+  node_1a [description = "EKS Node"]
+  bastion [description = "SSM Bastion\n(t3.micro)"]
+  internal_nlb [description = "Internal NLB\n(LDAP)"]
+}
+
+network private-10.0.20.0 {
+  color = "blue"
+  address = "10.0.20.0/24 (us-east-1b)"
+  nat_gw
+  api_server
+  node_1b [description = "EKS Node"]
+  internal_nlb
+}
+@endnwdiag

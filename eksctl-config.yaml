@@ -1,0 +1,41 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: moc-eks-example
+  region: us-east-1
+  version: "1.36"
+
+vpc:
+  id: vpc-0ecbb4329f7b63e7e
+  subnets:
+    public:
+      us-east-1a:
+        id: subnet-01d4b8666475d72f8
+      us-east-1b:
+        id: subnet-0e3c41e27021ee2cf
+    private:
+      us-east-1a:
+        id: subnet-03c100452526d2336
+      us-east-1b:
+        id: subnet-04c4f4b0048e21c9d
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+  - name: default
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 4
+    privateNetworking: true
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
